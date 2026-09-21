@@ -1347,18 +1347,13 @@
                 container.appendChild(emptyCell);
             }
 
-            // Obtener SOLO visitas técnicas (realizadas + proyectadas)
-            // Excluir completamente visitas posventa
-            // Filtrar visitasProyectadas para asegurar que solo incluyan técnicas
-            const visitasProyectadasFiltradas = visitasProyectadas.filter(v =>
-                v.tipoVisita === 'Visita Técnica' || v.tipoVisita.includes('Técnica')
-            );
-            const allVisitas = dataProgramacionFull.concat(visitasProyectadasFiltradas);
-            console.log('=== RENDERERIZANDO CALENDARIO MES (SOLO TÉCNICAS) ===');
+            // Obtener SOLO visitas técnicas de la tabla PROGRAMACION (realizadas y programadas)
+            // Excluir completamente: visitas posventa y visitas proyectadas algorítmicas
+            const allVisitas = dataProgramacionFull;
+            console.log('=== RENDERERIZANDO CALENDARIO MES (SOLO TÉCNICAS DE PROGRAMACION) ===');
             console.log('Mes:', monthNames[mesActual], anoActual);
             console.log('Total visitas técnicas disponibles:');
-            console.log('  - Técnicas (realizadas):', dataProgramacionFull.filter(v => v.estado === 'REALIZADO' || v.estado === 'TERMINADO').length);
-            console.log('  - Proyectadas:', visitasProyectadas.length);
+            console.log('  - Técnicas (realizadas/programadas):', dataProgramacionFull.length);
             console.log('  - TOTAL:', allVisitas.length);
 
             // Contar visitas en el mes actual
