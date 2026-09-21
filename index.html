@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Comercial - PILAR OYARCE</title>
-    
+
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -20,10 +20,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <style>
         body { font-family: 'Inter', sans-serif; }
-        
+
         .c-tab-content { display: none; }
         .c-tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -40,18 +40,18 @@
 
     <div id="loading-overlay" class="fixed inset-0 bg-slate-900/95 z-[100] flex flex-col items-center justify-center text-white transition-opacity duration-300">
         <i class="fa-solid fa-circle-notch fa-spin text-5xl mb-4 text-rose-500"></i>
-        <h2 class="text-2xl font-bold tracking-widest">PILAR OYARCE</h2>
+        <h2 class="text-2xl font-bold tracking-widest" id="overlay-comercial">PILAR OYARCE</h2>
         <p class="text-sm text-slate-400 mt-2">Cargando cartera de clientes exclusiva...</p>
     </div>
 
-    <!-- Encabezado Personalizado para Pilar Oyarce -->
+    <!-- Encabezado Personalizado -->
     <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between shrink-0 shadow-sm z-10 transition-colors duration-200">
         <div class="flex items-center gap-4">
             <div class="bg-rose-600 p-2.5 rounded-full text-white shadow-md">
                 <i class="fa-solid fa-user-tie text-xl w-6 text-center"></i>
             </div>
             <div>
-                <h2 class="text-2xl font-black text-rose-700 dark:text-rose-500 leading-tight tracking-tight">PILAR OYARCE</h2>
+                <h2 class="text-2xl font-black text-rose-700 dark:text-rose-500 leading-tight tracking-tight" id="header-comercial">PILAR OYARCE</h2>
                 <p class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mt-0.5">Dashboard Comercial SPARTAN</p>
             </div>
         </div>
@@ -67,7 +67,7 @@
     </header>
 
     <main class="flex-1 overflow-y-auto p-4 md:p-6">
-        
+
         <!-- Filtros Principales -->
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-5 border border-slate-200 dark:border-slate-700 mb-6 border-t-4 border-t-rose-500">
             <div class="flex flex-col md:flex-row gap-4">
@@ -95,7 +95,7 @@
                 <div class="w-20 h-20 bg-rose-50 dark:bg-rose-900/30 rounded-full flex items-center justify-center mb-4 text-rose-500 dark:text-rose-400 text-4xl">
                     <i class="fa-solid fa-handshake"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">¡Hola, Pilar!</h3>
+                <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200" id="welcome-message">¡Hola, Pilar!</h3>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-sm">Utiliza los selectores de arriba para escoger uno de tus clientes asignados y visualizar su resumen de operaciones y equipos.</p>
             </div>
 
@@ -110,7 +110,7 @@
 
         <!-- Dashboard del Cliente (Oculto hasta seleccionar) -->
         <div id="cliente-profile-wrapper" class="hidden space-y-6 pb-10">
-            
+
             <!-- KPIs Rápidos -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden flex items-center justify-between">
@@ -416,6 +416,9 @@
     </main>
 
     <script>
+        // ========== COMERCIAL ASIGNADO ==========
+        const COMERCIAL_ASIGNADO = "PILAR OYARCE";
+
         function toggleTheme() {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
@@ -427,22 +430,16 @@
             if(monthlyChartInstance) monthlyChartInstance.update();
         }
 
-        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqlXgkj_Fv8Mjw9USgv9icHvqFJXO4PfJRRKN1YSPwvbJ25bEf0ZsfJOPAuiR7y7dU3A/exec"; 
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqlXgkj_Fv8Mjw9USgv9icHvqFJXO4PfJRRKN1YSPwvbJ25bEf0ZsfJOPAuiR7y7dU3A/exec";
 
-        // Cartera estricta y exclusiva de PILAR OYARCE extraida de SPARTAN.xlsx
-        const CARTERA_PILAR_OYARCE = [
-            'SAN FERNANDO', 'REDONDOS', 'ARA EXPORT', 'BIMBO', 'ALIOVO', 
-            'AIB', 'PACCU S A', 'ARA FOODS', 'SOLUTANKS DEL PERU SAC', 
-            'BRANCHOUT FOOD', 'ALICORP S.A.A.'
-        ];
-
-        let dataProgramacionFull = []; 
-        let dataProgPvFull = []; 
+        let dataProgramacionFull = [];
+        let dataProgPvFull = [];
         let dataSedesExtendida = [];
         let dataComodatoFull = [];
-        
+        let clientesDelComericial = new Set();
+
         let activeChartYear = new Date().getFullYear();
-        let monthlyChartInstance = null; 
+        let monthlyChartInstance = null;
 
         function getVal(obj, possibleKeys) {
             const keys = Object.keys(obj);
@@ -453,12 +450,6 @@
                 }
             }
             return null;
-        }
-
-        // Verifica si un cliente pertenece a Pilar Oyarce
-        function esClienteDePilar(clienteStr) {
-            if(!clienteStr) return false;
-            return CARTERA_PILAR_OYARCE.includes(clienteStr.trim().toUpperCase());
         }
 
         function fetchRealData() {
@@ -473,116 +464,131 @@
                         return response.json();
                     })
                     .then(data => {
-                
-                const sedesRaw = data.sedes || data.SEDES || [];
-                const progRaw = data.programacion || data.PROGRAMACION || [];
-                const progPvRaw = data.programacion_pv || data['PROGRAMACION PV'] || []; 
-                const comodRaw = data.comodato || data.COMODATO || [];
-                const mantoRaw = data.mantenimiento || data.MANTENIMIENTO || [];
+                        // PASO 1: Leer la tabla CLIENTES y obtener todos los clientes del comercial actual
+                        const clientesRaw = data.clientes || data.CLIENTES || [];
+                        clientesDelComericial = new Set();
 
-                // Cargar SOLO sedes de los clientes de Pilar Oyarce
-                dataSedesExtendida = [];
-                sedesRaw.forEach(row => {
-                    const c = String(getVal(row, ['CLIENTE', 'Cliente']) || "").trim().toUpperCase();
-                    if (esClienteDePilar(c)) {
-                        dataSedesExtendida.push({
-                            cliente: c,
-                            sede: String(getVal(row, ['SEDE', 'Sede']) || "").trim().toUpperCase(),
-                            frecuencia: parseInt(getVal(row, ['FrecuenciaVisitaDias', 'Frecuencia'])) || 0,
-                            ubicacion: String(getVal(row, ['UbicaSedes', 'Ubicacion']) || "").trim(),
-                            contactoNombre: String(getVal(row, ['ContactoNombre']) || "").trim(),
-                            contactoCargo: String(getVal(row, ['ContactoCargo']) || "").trim(),
-                            contactoTelefono: String(getVal(row, ['ContactoTelefono']) || "").trim(),
-                            contactoCorreo: String(getVal(row, ['ContactoCorreo']) || "").trim()
+                        clientesRaw.forEach(row => {
+                            const asesor = String(getVal(row, ['ASESOR', 'Asesor']) || "").trim().toUpperCase();
+                            const cliente = String(getVal(row, ['CLIENTE', 'Cliente']) || "").trim().toUpperCase();
+
+                            if (asesor === COMERCIAL_ASIGNADO.toUpperCase() && cliente) {
+                                clientesDelComericial.add(cliente);
+                            }
                         });
-                    }
-                });
-                dataSedesExtendida = dataSedesExtendida.filter(s => s.cliente && s.sede);
-                console.log('DEBUG: Sedes Pilar:', dataSedesExtendida.length);
 
-                // Cargar SOLO programacion (Técnica) de Pilar Oyarce
-                dataProgramacionFull = [];
-                progRaw.forEach(row => {
-                    const c = String(getVal(row, ['Cliente', 'CLIENTE']) || "").trim().toUpperCase();
-                    if (esClienteDePilar(c)) {
-                        let f = getVal(row, ['Dia', 'Fecha']);
-                        dataProgramacionFull.push({
-                            id: String(getVal(row, ['nProgram', 'ID']) || "S/ID").trim(),
-                            cliente: c,
-                            sede: String(getVal(row, ['Sede', 'SEDE']) || "").trim().toUpperCase(),
-                            fecha: f ? String(f).split('T')[0] : "",
-                            estado: String(getVal(row, ['Estado', 'ESTADO']) || "").trim().toUpperCase(),
-                            tecnico: String(getVal(row, ['Tecnico', 'TECNICO']) || "Sin asignar").trim(),
-                            tipoVisita: String(getVal(row, ['TipoVisita']) || "Visita Técnica").trim()
+                        console.log(`DEBUG: Clientes de ${COMERCIAL_ASIGNADO}:`, Array.from(clientesDelComericial).sort());
+
+                        const sedesRaw = data.sedes || data.SEDES || [];
+                        const progRaw = data.programacion || data.PROGRAMACION || [];
+                        const progPvRaw = data.programacion_pv || data['PROGRAMACION PV'] || [];
+                        const comodRaw = data.comodato || data.COMODATO || [];
+                        const mantoRaw = data.mantenimiento || data.MANTENIMIENTO || [];
+
+                        // PASO 2: Cargar SOLO sedes de los clientes del comercial
+                        dataSedesExtendida = [];
+                        sedesRaw.forEach(row => {
+                            const c = String(getVal(row, ['CLIENTE', 'Cliente']) || "").trim().toUpperCase();
+                            if (clientesDelComericial.has(c)) {
+                                dataSedesExtendida.push({
+                                    cliente: c,
+                                    sede: String(getVal(row, ['SEDE', 'Sede']) || "").trim().toUpperCase(),
+                                    frecuencia: parseInt(getVal(row, ['FrecuenciaVisitaDias', 'Frecuencia'])) || 0,
+                                    ubicacion: String(getVal(row, ['UbicaSedes', 'Ubicacion']) || "").trim(),
+                                    contactoNombre: String(getVal(row, ['ContactoNombre']) || "").trim(),
+                                    contactoCargo: String(getVal(row, ['ContactoCargo']) || "").trim(),
+                                    contactoTelefono: String(getVal(row, ['ContactoTelefono']) || "").trim(),
+                                    contactoCorreo: String(getVal(row, ['ContactoCorreo']) || "").trim()
+                                });
+                            }
                         });
-                    }
-                });
-                console.log('DEBUG: Programacion (Técnica) Pilar:', dataProgramacionFull.length);
+                        dataSedesExtendida = dataSedesExtendida.filter(s => s.cliente && s.sede);
+                        console.log('DEBUG: Sedes del comercial:', dataSedesExtendida.length);
 
-                // Cargar SOLO programacion (Posventa) de Pilar Oyarce
-                dataProgPvFull = [];
-                progPvRaw.forEach(row => {
-                    const c = String(getVal(row, ['ClientePv', 'CLIENTE']) || "").trim().toUpperCase();
-                    if (esClienteDePilar(c)) {
-                        let f = getVal(row, ['DiaPv', 'Fecha']);
-                        let idProg = String(getVal(row, ['nProgramPv', 'ID']) || "S/ID").trim();
-                        dataProgPvFull.push({
-                            id: idProg,
-                            cliente: c,
-                            sede: String(getVal(row, ['SedePv', 'SEDE']) || "").trim().toUpperCase(),
-                            fecha: f ? String(f).split('T')[0] : "",
-                            estado: String(getVal(row, ['EstadoPv', 'ESTADO']) || "").trim().toUpperCase(),
-                            tecnico: String(getVal(row, ['ResponsablePv', 'TECNICO']) || "Sin asignar").trim(),
-                            tipoVisita: String(getVal(row, ['TipoVisitaPv']) || "Visita Posventa").trim()
-                            // Icono y enlace de PDF eliminados.
+                        // PASO 3: Cargar SOLO programacion (Técnica) del comercial
+                        dataProgramacionFull = [];
+                        progRaw.forEach(row => {
+                            const c = String(getVal(row, ['Cliente', 'CLIENTE']) || "").trim().toUpperCase();
+                            if (clientesDelComericial.has(c)) {
+                                let f = getVal(row, ['Dia', 'Fecha']);
+                                dataProgramacionFull.push({
+                                    id: String(getVal(row, ['nProgram', 'ID']) || "S/ID").trim(),
+                                    cliente: c,
+                                    sede: String(getVal(row, ['Sede', 'SEDE']) || "").trim().toUpperCase(),
+                                    fecha: f ? String(f).split('T')[0] : "",
+                                    estado: String(getVal(row, ['Estado', 'ESTADO']) || "").trim().toUpperCase(),
+                                    tecnico: String(getVal(row, ['Tecnico', 'TECNICO']) || "Sin asignar").trim(),
+                                    tipoVisita: String(getVal(row, ['TipoVisita']) || "Visita Técnica").trim()
+                                });
+                            }
                         });
-                    }
-                });
-                console.log('DEBUG: Programacion (Posventa) Pilar:', dataProgPvFull.length);
+                        console.log('DEBUG: Programacion (Técnica) del comercial:', dataProgramacionFull.length);
 
-                // Diluciones registradas
-                const dictDiluciones = {};
-                mantoRaw.forEach(row => {
-                    const eqId = String(getVal(row, ['EQUIPO ID']) || "").trim();
-                    const dilucion = String(getVal(row, ['PQDILUCION']) || "").trim();
-                    if(eqId && dilucion && dilucion !== "null" && dilucion !== "undefined" && dilucion !== "-") {
-                        dictDiluciones[eqId] = dilucion;
-                    }
-                });
-
-                // Cargar SOLO comodatos (Equipos) de Pilar Oyarce
-                dataComodatoFull = [];
-                comodRaw.forEach(row => {
-                    const c = String(getVal(row, ['CLIENTE']) || "").trim().toUpperCase();
-                    if (esClienteDePilar(c)) {
-                        let f = getVal(row, ['INSTALACION']);
-                        const eqId = String(getVal(row, ['IDENEQUIPO', 'EQUIPOID']) || "-").trim();
-                        dataComodatoFull.push({
-                            cliente: c,
-                            sede: String(getVal(row, ['SEDE']) || "").trim().toUpperCase(),
-                            equipoId: eqId, 
-                            equipoRef: String(getVal(row, ['EQUIPO']) || "").trim().toUpperCase(),
-                            area: String(getVal(row, ['AREA']) || "-").trim().toUpperCase(),
-                            subarea: String(getVal(row, ['SUB AREA', 'SUBAREA']) || "-").trim().toUpperCase(),
-                            instalacion: f ? String(f).split('T')[0] : "",
-                            costo: parseFloat(String(getVal(row, ['COSTOUND']) || "0").replace(/[^0-9.]/g, '')) || 0,
-                            dilucion: dictDiluciones[eqId] || "-"
+                        // PASO 4: Cargar SOLO programacion (Posventa) del comercial
+                        dataProgPvFull = [];
+                        progPvRaw.forEach(row => {
+                            const c = String(getVal(row, ['ClientePv', 'CLIENTE']) || "").trim().toUpperCase();
+                            if (clientesDelComericial.has(c)) {
+                                let f = getVal(row, ['DiaPv', 'Fecha']);
+                                let idProg = String(getVal(row, ['nProgramPv', 'ID']) || "S/ID").trim();
+                                dataProgPvFull.push({
+                                    id: idProg,
+                                    cliente: c,
+                                    sede: String(getVal(row, ['SedePv', 'SEDE']) || "").trim().toUpperCase(),
+                                    fecha: f ? String(f).split('T')[0] : "",
+                                    estado: String(getVal(row, ['EstadoPv', 'ESTADO']) || "").trim().toUpperCase(),
+                                    tecnico: String(getVal(row, ['ResponsablePv', 'TECNICO']) || "Sin asignar").trim(),
+                                    tipoVisita: String(getVal(row, ['TipoVisitaPv']) || "Visita Posventa").trim()
+                                });
+                            }
                         });
-                    }
-                });
+                        console.log('DEBUG: Programacion (Posventa) del comercial:', dataProgPvFull.length);
+
+                        // Diluciones registradas
+                        const dictDiluciones = {};
+                        mantoRaw.forEach(row => {
+                            const eqId = String(getVal(row, ['EQUIPO ID']) || "").trim();
+                            const dilucion = String(getVal(row, ['PQDILUCION']) || "").trim();
+                            if(eqId && dilucion && dilucion !== "null" && dilucion !== "undefined" && dilucion !== "-") {
+                                dictDiluciones[eqId] = dilucion;
+                            }
+                        });
+
+                        // PASO 5: Cargar SOLO comodatos (Equipos) del comercial
+                        dataComodatoFull = [];
+                        comodRaw.forEach(row => {
+                            const c = String(getVal(row, ['CLIENTE']) || "").trim().toUpperCase();
+                            if (clientesDelComericial.has(c)) {
+                                let f = getVal(row, ['INSTALACION']);
+                                const eqId = String(getVal(row, ['IDENEQUIPO', 'EQUIPOID']) || "-").trim();
+                                dataComodatoFull.push({
+                                    cliente: c,
+                                    sede: String(getVal(row, ['SEDE']) || "").trim().toUpperCase(),
+                                    equipoId: eqId,
+                                    equipoRef: String(getVal(row, ['EQUIPO']) || "").trim().toUpperCase(),
+                                    area: String(getVal(row, ['AREA']) || "-").trim().toUpperCase(),
+                                    subarea: String(getVal(row, ['SUB AREA', 'SUBAREA']) || "-").trim().toUpperCase(),
+                                    instalacion: f ? String(f).split('T')[0] : "",
+                                    costo: parseFloat(String(getVal(row, ['COSTOUND']) || "0").replace(/[^0-9.]/g, '')) || 0,
+                                    dilucion: dictDiluciones[eqId] || "-"
+                                });
+                            }
+                        });
+
+                        // Update UI text
+                        document.getElementById('overlay-comercial').innerText = COMERCIAL_ASIGNADO;
+                        document.getElementById('header-comercial').innerText = COMERCIAL_ASIGNADO;
+                        const firstName = COMERCIAL_ASIGNADO.split(' ')[0];
+                        document.getElementById('welcome-message').innerText = `¡Hola, ${firstName}!`;
 
                         populateClientFilter();
                         console.log('=== FETCH COMPLETADO EXITOSAMENTE ===');
                         console.log('RESUMEN DE DATOS CARGADOS:');
-                        console.log('- Sedes de Pilar:', dataSedesExtendida.length);
+                        console.log('- Sedes del comercial:', dataSedesExtendida.length);
                         console.log('- Visitas Técnicas (Realizadas):', dataProgramacionFull.filter(v => v.estado === 'REALIZADO' || v.estado === 'TERMINADO').length);
                         console.log('- Visitas Técnicas (Total):', dataProgramacionFull.length);
                         console.log('- Visitas Posventa (Realizadas):', dataProgPvFull.filter(v => v.estado === 'REALIZADO' || v.estado === 'TERMINADO').length);
                         console.log('- Visitas Posventa (Total):', dataProgPvFull.length);
-
-                        // Mostrar detalles por cliente
-                        const clientesUnicos = new Set(dataSedesExtendida.map(s => s.cliente));
-                        console.log('Clientes de Pilar en base de datos:', Array.from(clientesUnicos).sort());
 
                         overlay.classList.add('opacity-0');
                         setTimeout(() => { overlay.style.display = 'none'; }, 500);
@@ -604,7 +610,7 @@
             let opts = `<option value="">-- Selecciona un Cliente --</option>`;
             Array.from(clientesSet).sort().forEach(c => opts += `<option value="${c}">${c}</option>`);
             selCliente.innerHTML = opts;
-            
+
             document.getElementById('sel-sede').innerHTML = `<option value="">-- Elige una sede --</option>`;
             document.getElementById('sel-sede').disabled = true;
             document.getElementById('cliente-profile-wrapper').classList.add('hidden');
@@ -614,7 +620,7 @@
         function updateSedeDropdown() {
             const selCliente = document.getElementById('sel-cliente').value;
             const selSede = document.getElementById('sel-sede');
-            
+
             if(!selCliente) {
                 selSede.innerHTML = `<option value="">-- Elige una sede --</option>`;
                 selSede.disabled = true;
@@ -634,7 +640,7 @@
         function renderClientProfile() {
             const cliente = document.getElementById('sel-cliente').value;
             const Sede = document.getElementById('sel-sede').value;
-            
+
             if(!cliente || !Sede) {
                 document.getElementById('cliente-profile-wrapper').classList.add('hidden');
                 document.getElementById('cliente-empty-state').classList.remove('hidden');
@@ -645,7 +651,7 @@
             document.getElementById('cliente-empty-state').classList.add('hidden');
 
             const sedeInfo = dataSedesExtendida.find(s => s.cliente === cliente && s.sede === Sede) || {};
-            
+
             // 1. Info Lateral
             document.getElementById('cp-cliente-name').innerText = cliente;
             document.getElementById('cp-sede-name').innerText = Sede;
@@ -660,7 +666,7 @@
             const visTec = dataProgramacionFull.filter(p => p.cliente === cliente && p.sede === Sede);
             const visPv = dataProgPvFull.filter(p => p.cliente === cliente && p.sede === Sede);
             const equiposSede = dataComodatoFull.filter(p => p.cliente === cliente && p.sede === Sede);
-            
+
             // 3. Update KPIs (only 2026 visits)
             document.getElementById('kpi-equipos').innerText = equiposSede.length;
             const currentYear = new Date().getFullYear();
@@ -753,7 +759,7 @@
             if(!cliente || !Sede) return;
 
             let equipos = dataComodatoFull.filter(p => p.cliente === cliente && p.sede === Sede);
-            
+
             const selTipo = document.getElementById('flt-eq-tipo').value;
             const selArea = document.getElementById('flt-eq-area').value;
             const selSubarea = document.getElementById('flt-eq-subarea').value;
@@ -764,17 +770,17 @@
 
             let inversionTotal = 0;
             const grouped = {};
-            
+
             equipos.forEach(e => {
                 inversionTotal += (e.costo || 0);
-                
+
                 if(!grouped[e.equipoRef]) {
-                    grouped[e.equipoRef] = { 
-                        tipo: e.equipoRef, count: 0, costoTotal: 0, 
-                        areas: new Set(), subareas: new Set(), diluciones: new Set(), items: [] 
+                    grouped[e.equipoRef] = {
+                        tipo: e.equipoRef, count: 0, costoTotal: 0,
+                        areas: new Set(), subareas: new Set(), diluciones: new Set(), items: []
                     };
                 }
-                
+
                 grouped[e.equipoRef].count++;
                 grouped[e.equipoRef].costoTotal += (e.costo || 0);
                 if(e.area && e.area !== '-') grouped[e.equipoRef].areas.add(e.area);
@@ -848,7 +854,7 @@
         function switchClientTab(tabId) {
             document.querySelectorAll('.c-tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            
+
             document.querySelectorAll('.c-tab-btn').forEach(b => {
                 b.classList.remove('text-rose-600', 'dark:text-rose-400', 'border-rose-600', 'dark:border-rose-400', 'bg-white', 'dark:bg-slate-800');
                 b.classList.add('text-slate-500', 'border-transparent', 'hover:bg-slate-50', 'dark:hover:bg-slate-700/50');
@@ -870,7 +876,6 @@
             const container = document.getElementById('chart-year-selector');
             container.innerHTML = '';
 
-            // Botón de flecha izquierda
             const leftArrow = document.createElement('button');
             leftArrow.className = 'px-2.5 py-1 text-xs font-bold rounded-md transition bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300';
             leftArrow.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
@@ -882,13 +887,11 @@
             };
             container.appendChild(leftArrow);
 
-            // Mostrar año actual
             const yearDisplay = document.createElement('span');
             yearDisplay.className = 'px-4 py-1 text-xs font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded-md min-w-[60px] text-center';
             yearDisplay.innerText = String(activeChartYear);
             container.appendChild(yearDisplay);
 
-            // Botón de flecha derecha
             const rightArrow = document.createElement('button');
             rightArrow.className = 'px-2.5 py-1 text-xs font-bold rounded-md transition bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300';
             rightArrow.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
@@ -931,7 +934,6 @@
                             const monthIndex = elements[0].index;
                             const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-                            // Obtener visitas del mes
                             const visitasMes = [...vTec, ...vPv].filter(v => {
                                 const vDate = new Date(v.fecha + 'T12:00:00');
                                 return vDate.getMonth() === monthIndex;
@@ -952,8 +954,6 @@
         }
 
         function showChartMonthDetails(monthIndex, visitas, monthName, year) {
-            const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
             let html = `<div class="p-6 space-y-4">
                 <div class="mb-4 pb-4 border-b border-slate-200 dark:border-slate-700">
                     <h4 class="font-bold text-lg text-slate-800 dark:text-slate-200">${monthName} ${year}</h4>
@@ -1005,7 +1005,6 @@
                 return;
             }
 
-            // Generar visitas proyectadas basadas en la última visita y frecuencia
             const frecuencia = document.getElementById('cp-frecuencia').innerText;
             const frecuenciaNumero = parseInt(frecuencia) || 30;
             visitasProyectadas = generateProyectadosVisitas(cliente, Sede, frecuenciaNumero);
@@ -1021,20 +1020,16 @@
         }
 
         function getFilteredVisitas(cliente, Sede, includeAll = false) {
-            // SOLO devolver visitas TÉCNICAS (excluir completamente posventa)
             let visitas = [];
 
             if(includeAll) {
-                // Incluir todas las técnicas: realizadas + proyectadas
                 visitas = dataProgramacionFull.filter(p =>
                     p.cliente === cliente && p.sede === Sede
                 );
-                // Añadir proyectadas técnicas
                 visitas = visitas.concat(visitasProyectadas.filter(p =>
                     p.cliente === cliente && p.sede === Sede
                 ));
             } else {
-                // Solo visitas técnicas realizadas
                 visitas = dataProgramacionFull.filter(p =>
                     p.cliente === cliente && p.sede === Sede &&
                     (p.estado === 'REALIZADO' || p.estado === 'TERMINADO')
@@ -1053,7 +1048,6 @@
         }
 
         function generateProyectadosVisitas(cliente, Sede, frecuencia) {
-            // Obtener SOLO visitas técnicas realizadas para encontrar la última
             const visitasRealizadas = dataProgramacionFull.filter(v =>
                 v.cliente === cliente && v.sede === Sede && isVisitaRealizada(v) && v.fecha
             );
@@ -1066,7 +1060,6 @@
             let ultimaVisita = null;
 
             if(visitasRealizadas.length > 0) {
-                // Encontrar la última visita realizada
                 visitasRealizadas.forEach(v => {
                     const vDate = new Date(v.fecha + 'T12:00:00');
                     if(!ultimaFecha || vDate > ultimaFecha) {
@@ -1075,7 +1068,6 @@
                     }
                 });
             } else {
-                // Si no hay visitas realizadas, usar hoy como punto de partida
                 ultimaFecha = new Date();
                 ultimaFecha.setHours(0, 0, 0, 0);
                 ultimaVisita = { tipoVisita: 'Visita Técnica' };
@@ -1089,11 +1081,10 @@
             fechaProxima.setDate(fechaProxima.getDate() + frecuencia);
 
             const ahora = new Date();
-            const finProyeccion = new Date(ahora.getFullYear() + 5, 11, 31); // 31 de diciembre 5 años adelante
+            const finProyeccion = new Date(ahora.getFullYear() + 5, 11, 31);
 
             let contador = 1;
             while(fechaProxima <= finProyeccion) {
-                // SIEMPRE usar 'Visita Técnica' para proyectadas (solo técnicas)
                 const tipoVisita = 'Visita Técnica';
 
                 proyectados.push({
@@ -1123,7 +1114,6 @@
         }
 
         function updateProgramacionCalendar() {
-            // Actualizar calendario con visitas técnicas
             showProgramacionAnnualView();
         }
 
@@ -1205,14 +1195,12 @@
             const firstDay = new Date(progCurrentYear, month, 1);
             const lastDay = new Date(progCurrentYear, month + 1, 0);
             const daysInMonth = lastDay.getDate();
-            // Convertir a lunes=0, domingo=6 (en lugar de domingo=0, lunes=1)
             let startingDayOfWeek = firstDay.getDay();
             startingDayOfWeek = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
 
             const container = document.getElementById('prog-calendar-monthly');
             container.innerHTML = '';
 
-            // Nombres de días (Lunes a Domingo)
             const dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
             dayNames.forEach(day => {
                 const dayHeader = document.createElement('div');
@@ -1221,14 +1209,12 @@
                 container.appendChild(dayHeader);
             });
 
-            // Espacios vacíos del mes anterior
             for(let i = 0; i < startingDayOfWeek; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.className = 'aspect-square';
                 container.appendChild(emptyCell);
             }
 
-            // Días del mes
             for(let day = 1; day <= daysInMonth; day++) {
                 const currentDate = new Date(progCurrentYear, month, day);
                 const visitasDelDia = visitas.filter(v => {
@@ -1245,15 +1231,12 @@
 
                 if(visitasDelDia.length > 0) {
                     if(realizadas > 0 && proyectadas > 0) {
-                        // Ambas tipos
                         bgClass = 'border-amber-500 bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60';
                         circleClass = '<span class="text-[10px] mt-0.5 flex gap-1"><i class="fa-solid fa-circle text-emerald-600"></i><i class="fa-solid fa-circle text-sky-500"></i></span>';
                     } else if(realizadas > 0) {
-                        // Solo realizadas
                         bgClass = 'border-emerald-500 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-900/60';
                         circleClass = '<span class="text-[10px] mt-0.5"><i class="fa-solid fa-circle text-emerald-600"></i></span>';
                     } else {
-                        // Solo proyectadas
                         bgClass = 'border-sky-500 bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-900/60';
                         circleClass = '<span class="text-[10px] mt-0.5"><i class="fa-solid fa-circle text-sky-500"></i></span>';
                     }
@@ -1305,7 +1288,6 @@
             }
             html += `</div>`;
 
-            // Insertar en un contenedor temporal o reemplazar la info
             const infoDiv = document.querySelector('#prog-monthly-view .mt-6');
             if(infoDiv) {
                 infoDiv.innerHTML = html;
@@ -1333,30 +1315,23 @@
             const firstDay = new Date(anoActual, mesActual, 1);
             const lastDay = new Date(anoActual, mesActual + 1, 0);
             const daysInMonth = lastDay.getDate();
-            // Convertir a lunes=0, domingo=6 (en lugar de domingo=0, lunes=1)
             let startingDayOfWeek = firstDay.getDay();
             startingDayOfWeek = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
 
             const container = document.getElementById('cal-modal-days-container');
             container.innerHTML = '';
 
-            // Espacios vacíos del mes anterior
             for(let i = 0; i < startingDayOfWeek; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.className = 'aspect-square';
                 container.appendChild(emptyCell);
             }
 
-            // Obtener SOLO visitas técnicas de la tabla PROGRAMACION (realizadas y programadas)
-            // Excluir completamente: visitas posventa y visitas proyectadas algorítmicas
             const allVisitas = dataProgramacionFull;
             console.log('=== RENDERERIZANDO CALENDARIO MES (SOLO TÉCNICAS DE PROGRAMACION) ===');
             console.log('Mes:', monthNames[mesActual], anoActual);
-            console.log('Total visitas técnicas disponibles:');
-            console.log('  - Técnicas (realizadas/programadas):', dataProgramacionFull.length);
-            console.log('  - TOTAL:', allVisitas.length);
+            console.log('Total visitas técnicas disponibles:', dataProgramacionFull.length);
 
-            // Contar visitas en el mes actual
             const visitasEnMes = allVisitas.filter(v => {
                 if(!v.fecha) return false;
                 const vDate = new Date(v.fecha + 'T12:00:00');
@@ -1364,7 +1339,6 @@
             });
             console.log('Visitas técnicas en este mes:', visitasEnMes.length);
 
-            // Días del mes
             for(let day = 1; day <= daysInMonth; day++) {
                 const currentDate = new Date(anoActual, mesActual, day);
 
@@ -1395,7 +1369,6 @@
                 let innerHTML = `<span class="text-base font-black mb-1">${day}</span>`;
 
                 if(visitasDelDia.length > 0) {
-                    // Agrupar por cliente y tipo
                     const visitasPorClienteTipo = {};
                     visitasDelDia.forEach(v => {
                         const key = `${v.cliente}|${v.tipoVisita}`;
@@ -1405,7 +1378,6 @@
                         visitasPorClienteTipo[key].count++;
                     });
 
-                    // Mostrar cada combinación cliente-tipo
                     innerHTML += '<div class="space-y-1 w-full">';
                     Object.values(visitasPorClienteTipo).forEach(item => {
                         const estadoClass = item.isRealizada ? 'bg-emerald-200 text-emerald-700' : 'bg-sky-200 text-sky-700';
@@ -1426,7 +1398,6 @@
             const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
             const anoActual = new Date().getFullYear();
 
-            // Filtrar solo visitas técnicas
             const visitasTecnicas = visitas;
 
             document.getElementById('visitas-dia-titulo').innerText = `Visitas Técnicas - ${day} de ${monthNames[month]}`;
@@ -1435,7 +1406,6 @@
             const contenido = document.getElementById('visitas-dia-contenido');
             contenido.innerHTML = '';
 
-            // Agrupar por cliente
             const visitasPorCliente = {};
             visitasTecnicas.forEach(v => {
                 const key = `${v.cliente}|${v.sede}`;
@@ -1448,7 +1418,6 @@
             Object.entries(visitasPorCliente).forEach(([key, visitasCliente]) => {
                 const [cliente, sede] = key.split('|');
 
-                // Obtener info de la sede
                 const sedeInfo = dataSedesExtendida.find(s => s.cliente === cliente && s.sede === sede) || {};
 
                 const card = document.createElement('div');
@@ -1492,7 +1461,6 @@
             document.getElementById('visitas-dia-modal').classList.add('hidden');
         }
 
-        // Cerrar modal al hacer clic fuera
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('calendario-modal').addEventListener('click', (e) => {
                 if(e.target.id === 'calendario-modal') {
@@ -1512,7 +1480,6 @@
         });
 
         function generateAllProyectados() {
-            // Generar visitas proyectadas para todos los clientes de la cartera
             const allProyectados = [];
             const clientesUnicos = new Set(dataSedesExtendida.map(s => s.cliente));
 
